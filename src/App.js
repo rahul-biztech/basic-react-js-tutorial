@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import styles from './App.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
 
@@ -10,7 +11,7 @@ class App extends Component {
       { name: "React JS", age: 27 },
       { name: "React Native", age: 28 },
     ],
-    isShowPersons: true
+    isShowPersons: false
   }
 
   _updateNameHandler = () => {
@@ -45,30 +46,23 @@ class App extends Component {
 
   render() {
 
-    const style = {
-      backgroundColor: 'red',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      margin: '10px',
-      color: 'white',
-    };
-
     const isVisible = this.state.isShowPersons;
     const label = isVisible ? "Hide" : "Show";
 
+    let btnClass = '';
+
     let persons = null;
     if (isVisible) {
-      style.backgroundColor = "green";
+      btnClass = styles.Red;
       persons = (
         this.state.persons.map((person, index) => {
-          return <Person
-            name={person.name}
-            age={person.age}
-            changed={(event) => this._onChangeHandler(event, index)}
-            click={this._deletePersonHandler}
-            key={index} />
+          return <ErrorBoundary key={index}>
+            <Person
+              name={person.name}
+              age={person.age}
+              changed={(event) => this._onChangeHandler(event, index)}
+              click={this._deletePersonHandler} />
+          </ErrorBoundary>
         })
       )
     }
@@ -76,28 +70,31 @@ class App extends Component {
     let btnUpdate = null;
     if (isVisible) {
       btnUpdate = (
-        <button style={style} onClick={this._updateNameHandler}>Update</button>
+        <button onClick={this._updateNameHandler}>Update</button>
       );
     }
 
     //let classes = ['red', 'bold'].join(' ');
     let classes = [];
     if (this.state.persons.length <= 2) {
-      classes.push('red');
+      classes.push(styles.Red);
     }
 
     if (this.state.persons.length <= 1) {
-      classes.push('bold');
+      classes.push(styles.Bold);
     }
 
     return (
-        <div className="App">
-          <h1>Hi, I'm React App.</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          {btnUpdate}
-          <button style={style} key="1" onClick={this._togglePersonsVisibilityHandler.bind(this, !isVisible)}>{label}</button>
-          {persons}
-        </div>
+      <div className={styles.App}>
+        <h1>Hi, I'm React App.</h1>
+        <p className={classes.join(' ')}>This is really working!</p>
+        {btnUpdate}
+        <button
+          className={btnClass}
+          onClick={this._togglePersonsVisibilityHandler.bind(this, !isVisible)}>
+          {label}</button>
+        {persons}
+      </div>
     );
   }
 }
