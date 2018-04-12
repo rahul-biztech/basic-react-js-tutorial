@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Radium, { StyleRoot } from 'radium';
 import Person from './Person/Person';
 
 class App extends Component {
@@ -54,10 +53,6 @@ class App extends Component {
       cursor: 'pointer',
       margin: '10px',
       color: 'white',
-      ':hover': {
-        backgroundColor: 'salmon',
-        color: 'black'
-      }
     };
 
     const isVisible = this.state.isShowPersons;
@@ -66,10 +61,6 @@ class App extends Component {
     let persons = null;
     if (isVisible) {
       style.backgroundColor = "green";
-      style[':hover'] = {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      };
       persons = (
         this.state.persons.map((person, index) => {
           return <Person
@@ -100,7 +91,6 @@ class App extends Component {
     }
 
     return (
-      <StyleRoot>
         <div className="App">
           <h1>Hi, I'm React App.</h1>
           <p className={classes.join(' ')}>This is really working!</p>
@@ -108,9 +98,8 @@ class App extends Component {
           <button style={style} key="1" onClick={this._togglePersonsVisibilityHandler.bind(this, !isVisible)}>{label}</button>
           {persons}
         </div>
-      </StyleRoot>
     );
   }
 }
 
-export default Radium(App);
+export default App;
